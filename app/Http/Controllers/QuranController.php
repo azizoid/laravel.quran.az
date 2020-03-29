@@ -17,20 +17,11 @@ class QuranController extends Controller
 {
   public function index($s=null, $a=null)
   {
-      /*
-      $where = ['soorah_id'=>$s];
-      if(!empty($a)){
-          $where['aaya_id'] = $a;
-      }
-      $out = Quran::select(['soorah_id as s', 'aya_id as a', 'content as c'])->where($where)->where('translator_id', 1)->get();
-      return response()->json(
-         compact('out') 
-      );
-      */
       $data       =   ['s'=>null, 'a'=>null, 'q'=>null, 'view'=>'empty'];
       $view       =   "search";
-      $limit      =   is_numeric(@$_GET['limit']) && $_GET['limit'] > 0  && $_GET['limit'] <100 ? $_GET['limit'] : 30;
-      $trans      =   is_numeric(@$_GET['trans']) && in_array($_GET['trans'], array(1,2,3)) ? $_GET['trans'] : 1;
+      $limit      =   isset($_GET['limit']) && is_numeric($_GET['limit']) && $_GET['limit'] > 0  && $_GET['limit'] <100 ? $_GET['limit'] : 1;
+      $trans      =   isset($_GET['trans']) && is_numeric($_GET['trans']) && in_array($_GET['trans'], array(1,2,3)) ? $_GET['trans'] : 1;
+      $random     =   isset($_GET['random']) && is_numeric($_GET['random']) && $_GET['random'] ==1 ? 1 : 0;
 
       $where      =   ['translator_id'=>$trans];
 
@@ -45,7 +36,7 @@ class QuranController extends Controller
               $data['a']      = $a;
               $where['aya_id']= $a;
           }
-
+          
           $out = Quran::select('id', 'soorah_id as s', 'aya_id as a', 'content as c')
                   ->where($where)->limit($limit)->get();
       }
@@ -56,7 +47,7 @@ class QuranController extends Controller
           $data['q'] =  $query;
           $out = Quran::select('id', 'soorah_id as s', 'aya_id as a', 'content as c')
                   ->where('content', 'like', '%'.$query.'%')
-                  ->limit($limit)->get();
+                  ->limit($limit)->inRandomOrder()->get();
       }
 
       return response()->json(

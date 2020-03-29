@@ -13,8 +13,8 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('/{s}/{t?}', 'QuranController@index')->where(['s'=>'[0-9]+', 't'=>'t[1,2,3]']);
-Route::get('/{s}/{a}/{t?}', 'QuranController@index')->where(['s'=>'[0-9]+', 'a'=>'[0-9]+', 't'=>'t[1,2,3]']);
-Route::get('/show/{q}/{t?}', 'QuranController@index')->where('t', 't[1,2,3]'); //a-ZıəçşüğöIƏÇŞÜĞÖ\,\.\s
+Route::get('/{s}', 'QuranController@index')->where(['s'=>'[0-9]+', 't'=>'t[1,2,3]']);
+Route::get('/{s}/{a}', 'QuranController@index')->where(['s'=>'[0-9]+', 'a'=>'[0-9]+']);
+Route::get('/show/{q}', 'QuranController@index')->where('t', 't[1,2,3]'); //a-ZıəçşüğöIƏÇŞÜĞÖ\,\.\s
 
 Route::post('search', 'QuranController@search');
